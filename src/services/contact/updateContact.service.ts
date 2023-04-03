@@ -2,31 +2,24 @@ import Contact from "../../entities/contact.entity";
 import AppDataSource from "../../data-source";
 import 'dotenv/config'
 import AppError from "../../errors/appError";
-import { IContactUpdate } from "../../interfaces/contacts";
+import { IContactUpdate, IContactResponse } from "../../interfaces/contacts";
 import { updateResponseContactSerializer } from "../../serializers/contacts.serializes";
 
-const updateContactService = async (contactData:IContactUpdate, contactId: string) : Promise<IContactUpdate> => {
+const updateContactService = async (contactData:IContactUpdate, contactId: string) : Promise<IContactResponse> => {
 
-    const bodyKeys = Object.keys(contactData)
-    bodyKeys.forEach((value)=>{
-        if(value == "id" || value == "createdAt"){
-            throw new AppError('Invalid data', 401)
-        }
-    })
-    
     const contactModel = AppDataSource.getRepository(Contact);
 
     const checkIfEmailExists = await contactModel.findOneBy({
         email: contactData.email,
       });
-    if(checkIfEmailExists) {
+    if(contactData.email && checkIfEmailExists) {
       throw new AppError("Email already exists", 409);
     }
 
     const checkIfNameExists = await contactModel.findOneBy({
         name: contactData.name,
       });
-    if(checkIfNameExists) {
+    if(contactData.name && checkIfNameExists) {
       throw new AppError("Name already exists", 409);
     }
 
@@ -45,18 +38,12 @@ const updateContactService = async (contactData:IContactUpdate, contactId: strin
 
     await contactModel.save(updateContact)
 
-    if(contactData.clientsId){
-      updateContact.clientsId = contactData.clientsId
-    }else{
-      updateContact.clientsId = contactDataQuery.clientsId
-    }
-
     try {
         const updateContactDataResp = await updateResponseContactSerializer.validate(updateContact, {
           abortEarly: true,
           stripUnknown: true
       })
-        return updateContactDataResp
+        return {data:updateContactDataResp, message:"Contato atualizado com sucesso"}
         
       } catch (err: any) {
         throw new AppError(err.errors)

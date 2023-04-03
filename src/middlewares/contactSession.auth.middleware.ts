@@ -17,7 +17,9 @@ const contactSessionAuthMiddleware =  (req :Request, resp:Response, next: NextFu
         if(error){
             throw new AppError(error.message, 401)
         }
-
+        if(!decoded.contactId){
+            throw new AppError("Não autorizado", 403)
+        }
         req.auth = {
                 contactId:decoded.contactId ,
         }

@@ -3,8 +3,8 @@ import AppDataSource from './data-source'
 
 AppDataSource.initialize().then(() => {
     console.log('Database connected!')
-    app.listen(3000, () => {
-        console.log('Server running in port 3000')
+    app.listen(3001, () => {
+        console.log('Server running in port 3001')
     })
     })  
     .catch(err => {

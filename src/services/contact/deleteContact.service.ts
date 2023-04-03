@@ -13,14 +13,14 @@ const deleteContactService = async (contactId:string) =>{
     );
     
     if (!contactData){
-        throw new AppError ('Not found', 404)
+        throw new AppError ('Não encontrado', 404)
     }
 
 
     await contactModel.remove(contactData)
 
    
-    return {message: "Contact deleted."}
+    return {message: "Contato deletado"}
 }
 
 export default deleteContactService;

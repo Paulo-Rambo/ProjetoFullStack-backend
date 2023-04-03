@@ -7,12 +7,25 @@ import  AppError  from "../../errors/appError";
 const createClientService = async ( clientDataReq: IClientCreateRequest): Promise<IClientResponse> => {
 
   const clientModel = AppDataSource.getRepository(Client);
-  const checkIfEmailExists = await clientModel.findOneBy({
-      email: clientDataReq.email,
-    });
-  if(checkIfEmailExists) {
-    throw new AppError("Email already exists", 409);
+  const checkIfEmailOrNameExists = await clientModel.findOneBy(
+      [
+      {email: clientDataReq.email},
+      {name: clientDataReq.name}
+      ]
+    );
+
+  if(checkIfEmailOrNameExists){
+    const values = Object.values(checkIfEmailOrNameExists);
+    values.forEach((value) => 
+      { 
+        if(value==clientDataReq.email){
+        throw new AppError("Email already exists", 409);
+        }
+      })
+      throw new AppError("Name already exists", 409);
   }
+
+
   const clientInstance = clientModel.create(clientDataReq);
   await clientModel.save(clientInstance);
 
@@ -21,7 +34,7 @@ const createClientService = async ( clientDataReq: IClientCreateRequest): Promis
       abortEarly: true,
       stripUnknown: true
   })
-    return createClientDataResp
+    return {data: createClientDataResp, message: "Criado com sucesso"}
     
   } catch (err: any) {
     throw new AppError(err.errors)

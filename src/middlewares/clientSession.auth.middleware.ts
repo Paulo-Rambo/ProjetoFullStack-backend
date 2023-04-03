@@ -8,7 +8,7 @@ const clientSessionAuthMiddleware =  (req :Request, resp:Response, next: NextFun
     const headersToken = req.headers.authorization
     
     if(!headersToken){
-        throw new AppError('Missing authorization headers', 401)
+        throw new AppError('Faltando autorização no headers', 401)
     }
     
     const token: string = headersToken.split(" ")[1]
@@ -17,7 +17,9 @@ const clientSessionAuthMiddleware =  (req :Request, resp:Response, next: NextFun
         if(error){
             throw new AppError(error.message, 401)
         }
-
+        if(!decoded.clientId){
+            throw new AppError("Não autorizado", 403)
+        }
         req.auth = {
                 clientId:decoded.clientId ,
         }

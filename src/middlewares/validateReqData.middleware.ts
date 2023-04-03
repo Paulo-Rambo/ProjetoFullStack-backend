@@ -8,14 +8,14 @@ const validateReqDataMiddleware = (schema: AnySchema) => async(req:Request, resp
         const validatedData = await schema.validate(req.body, {
             abortEarly: false,
             stripUnknown: true
-        })
+        });
 
         req.body = validatedData
         return next()
         
     } catch (err: any) {
         throw new AppError(err.errors)
-    }
+    };
 }
 
 export default validateReqDataMiddleware

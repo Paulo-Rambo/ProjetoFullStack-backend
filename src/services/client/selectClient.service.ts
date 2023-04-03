@@ -1,9 +1,9 @@
 import Client from "../../entities/client.entity";
 import AppDataSource from "../../data-source";
 import AppError from "../../errors/appError";
-import { IClientResponse } from "../../interfaces/clients"
+import { IClient } from "../../interfaces/clients"
 
-const selectClientService = async (clientId: string) : Promise<IClientResponse> =>{
+const selectClientService = async (clientId: string) : Promise<IClient> =>{
     const clientModel = AppDataSource.getRepository(Client);
     const clientData = await clientModel.findOne({
         where:{
@@ -13,7 +13,8 @@ const selectClientService = async (clientId: string) : Promise<IClientResponse> 
             name:true,
             email:true,
             createdAt:true,
-            id:true
+            id:true,
+            telephone:true,
         }
      })
     if(!clientData){

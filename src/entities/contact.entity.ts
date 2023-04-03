@@ -15,15 +15,18 @@ class Contact {
   @PrimaryGeneratedColumn("uuid")
   id: string;
   
-  @Column()
+  @Column({type:"varchar", unique:true, length:50})
   name: string;
   
   @Column()
   password: string;
   
-  @Column()
+  @Column({type:"varchar", unique:true, length:50})
   email: string;
   
+  @Column({type:"varchar", length:11})
+  telephone: string;
+
   @CreateDateColumn()
   createdAt: Date;
   
@@ -35,11 +38,11 @@ class Contact {
 
   @ManyToOne(()=> Client, (clients) => clients.contact, {
     onDelete: "CASCADE",
-    nullable: false,
+    nullable: true,
   })
   clients: Client
 
-  @Column()
+  @Column({nullable: true})
   clientsId: string
 
 }

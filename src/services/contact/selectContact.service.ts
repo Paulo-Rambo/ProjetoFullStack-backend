@@ -1,9 +1,9 @@
 import Contact from "../../entities/contact.entity";
 import AppDataSource from "../../data-source";
 import AppError from "../../errors/appError";
-import { IContactResponse } from "../../interfaces/contacts"
+import { IContact } from "../../interfaces/contacts"
 
-const selectContactService = async (contactId: string) : Promise<IContactResponse> =>{
+const selectContactService = async (contactId: string) : Promise<IContact> =>{
     const contactModel = AppDataSource.getRepository(Contact);
     const contactData = await contactModel.findOne({
         where:{
@@ -14,10 +14,11 @@ const selectContactService = async (contactId: string) : Promise<IContactRespons
             email:true,
             createdAt:true,
             id:true,
+            telephone:true,
         }
      })
     if(!contactData){
-        throw new AppError ('Not found or empty', 404)
+        throw new AppError ('Não encontrado ou vazio', 404)
     }
     return contactData
 }

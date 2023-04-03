@@ -4,7 +4,9 @@ import {
     getClientController, 
     updateClientController,
     deleteClientController,
-    listClientContactsController
+    listClientContactsController,
+    addContactOnClientController,
+    showContactsLeftController
     } from "../controllers/client.controller";
 import { loginClientController } from "../controllers/auth.controller";
 import { createClientSerializer, clientUpdateSerializer } from "../serializers/clients.serializers";
@@ -22,6 +24,8 @@ clientRoutes.patch('',
     )
 clientRoutes.delete('', clientSessionAuthMiddleware, deleteClientController)
 clientRoutes.get('/contacts', clientSessionAuthMiddleware, listClientContactsController)
+clientRoutes.get('/contacts_left', clientSessionAuthMiddleware, showContactsLeftController)
 clientRoutes.post('/login', loginClientController)
+clientRoutes.post('/:contactName', clientSessionAuthMiddleware, addContactOnClientController)
 
 export default clientRoutes;

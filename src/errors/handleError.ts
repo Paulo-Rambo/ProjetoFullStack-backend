@@ -8,9 +8,8 @@ const handleError = async(error: Error, req: Request, resp: Response, next: Next
         message: error.message
         })
     }
-        return resp.status(500).json({
-        message: 'Internal server error'
-    })
+        return console.log(error)
+    
 }
 
 export default handleError

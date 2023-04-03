@@ -15,4 +15,4 @@ const loginClientController = async (req: Request, resp: Response) => {
     return resp.status(200).json(dataResp);
   };
 
-export { loginContactController, loginClientController};
+export { loginContactController, loginClientController };
